@@ -1,14 +1,14 @@
 from setuptools import setup
 
 setup(
-    name='visioimg',
+    name='visioemb_rst',
     version='1.0.0',
     author='Yassu',
     author_email='yassumath@gmail.com',
     url='https://github.com/yassu/VisioInRst',
     description='Python reStructuredText directive for embedding visio image',
     license='MIT',
-    packages=['visioimg'],
+    packages=['visioemb_rst'],
     install_requires=[
         'visio2img'
     ],
