@@ -38,11 +38,11 @@ class VisioImage(Directive):
                 try:
                     export_img(visio_filename, gen_img_filename, page_num=1)
                 except Exception as err:
-                    print('Exporting Error')
+                    stderr.write('Exporting Error')
             except Exception as err:
                 err_text = err.__class__.__name__
                 err_text += str(err)
-                print(err_text)
+                stderr.write(err_text)
                 raise self.error(err_text)
 
             reference = directives.uri(gen_img_filename)
@@ -51,5 +51,5 @@ class VisioImage(Directive):
                                      **self.options)
             return [image_node]
         except Exception as err:
-            print(err)
+            stderr.write(err)
             return []
