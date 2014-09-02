@@ -5,8 +5,6 @@ from docutils.parsers.rst import Directive
 from visio2img import export_img
 import os.path
 from sys import stderr
-print('visioimg install ...')
-
 
 
 def setup(builder):
@@ -26,20 +24,29 @@ class VisioImage(Directive):
                    'height': directives.nonnegative_int,
                    'width': directives.nonnegative_int,
                    'scale': directives.nonnegative_int,
-                   'align': align
+                   'align': align,
+                   'page': directives.nonnegative_int,
+                   'name': lambda arg: arg
                    }
     has_content = False
 
     def run(self):
         try:
-            print('visioimg running ...')
+            d_img_opts = self.options
+            if 'name' in d_img_opts:
+                page_name = d_img_opts['name']
+                del(d_img_opts['name'])
             visio_filename = self.arguments[0]
             gen_img_filename = os.path.splitext(self.arguments[0])[0] + '.png'
             gen_img_filename = os.path.abspath(gen_img_filename)
             try:
                 try:
-                    export_img(visio_filename, gen_img_filename, page_num=1)
+                    page_num = None
+                    export_img(visio_filename, gen_img_filename,
+                            page_num=page_num,
+                            page_name=page_name)
                 except Exception as err:
+                    print(err)
                     stderr.write('Exporting Error')
             except Exception as err:
                 err_text = err.__class__.__name__
@@ -49,8 +56,9 @@ class VisioImage(Directive):
 
             reference = directives.uri(gen_img_filename)
             self.options['uri'] = reference
+            
             image_node = nodes.image(rawsource=self.block_text,
-                                     **self.options)
+                                     **d_img_opts)
             return [image_node]
         except Exception as err:
             stderr.write(err)
