@@ -5,10 +5,17 @@ from docutils.parsers.rst import Directive
 from visio2img import export_img
 import os.path
 from sys import stderr
+from hashlib import md5
 
 
 def setup(builder):
     directives.register_directive('visioimg', VisioImage)
+
+def get_gen_img_filename(visio_filename, **options):
+    m = md5()
+    m.update((visio_filename + str(options)).encode())
+    h = m.hexdigest()   # h means hash
+    return os.path.join(os.path.dirname(visio_filename), h) + '.png'
 
 def align(argument):
     """Conversion function for the "align" option."""
@@ -38,19 +45,18 @@ class VisioImage(Directive):
             page_name = None
             if 'name' in d_img_opts:
                 page_name = d_img_opts['name']
-                print('namein')
                 del(d_img_opts['name'])
 
             # for page option
             page_num = None
             if 'page' in d_img_opts:
                 page_num = d_img_opts['page']
-                print('page in')
                 del(d_img_opts['page'])
 
 
             visio_filename = self.arguments[0]
-            gen_img_filename = os.path.splitext(self.arguments[0])[0] + '.png'
+            gen_img_filename = get_gen_img_filename(visio_filename,
+                    page_num=page_num)
             gen_img_filename = os.path.abspath(gen_img_filename)
             try:
                 try:
@@ -80,5 +86,5 @@ class VisioImage(Directive):
                                      **d_img_opts)
             return [image_node]
         except Exception as err:
-            stderr.write(err)
+            stderr.write(str(err))
             return []
