@@ -4,4 +4,8 @@ Visio Before
     :align: center
     :name: circle
 
+.. visioimg:: source/test.vsd
+    :align: center
+    :page:  1
+
 Visio After

@@ -33,15 +33,34 @@ class VisioImage(Directive):
     def run(self):
         try:
             d_img_opts = self.options
+            
+            # for name option
+            page_name = None
             if 'name' in d_img_opts:
                 page_name = d_img_opts['name']
+                print('namein')
                 del(d_img_opts['name'])
+
+            # for page option
+            page_num = None
+            if 'page' in d_img_opts:
+                page_num = d_img_opts['page']
+                print('page in')
+                del(d_img_opts['page'])
+
+
             visio_filename = self.arguments[0]
             gen_img_filename = os.path.splitext(self.arguments[0])[0] + '.png'
             gen_img_filename = os.path.abspath(gen_img_filename)
             try:
                 try:
-                    page_num = None
+                    print(
+                        'export_img({vis}, {gen}, page_num={num}, '
+                        'page_name={name})'.format(vis=visio_filename,
+                            gen=gen_img_filename, 
+                            num=page_num,
+                            name=page_name)
+                    )
                     export_img(visio_filename, gen_img_filename,
                             page_num=page_num,
                             page_name=page_name)
