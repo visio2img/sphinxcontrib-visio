@@ -3,8 +3,8 @@ from docutils.parsers.rst import directives
 from docutils.parsers.rst import Directive
 
 from visio2img import export_img
-print('installed ...')
 import os.path
+from sys import stderr
 
 
 
@@ -31,7 +31,6 @@ class VisioImage(Directive):
 
     def run(self):
         try:
-            print('running ...')
             visio_filename = self.arguments[0]
             gen_img_filename = os.path.splitext(self.arguments[0])[0] + '.png'
             gen_img_filename = os.path.abspath(gen_img_filename)
@@ -40,7 +39,6 @@ class VisioImage(Directive):
                     export_img(visio_filename, gen_img_filename, page_num=1)
                 except Exception as err:
                     print('Exporting Error')
-                print('Export ...')
             except Exception as err:
                 err_text = err.__class__.__name__
                 err_text += str(err)

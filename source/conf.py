@@ -31,7 +31,7 @@ import os
 # ones.
 
 sys.path.append('extensions')
-extensions = ['visioimg']
+extensions = ['visioimg.visioimg']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
