@@ -1,3 +1,5 @@
+from setuptools import setup
+
 setup(
     name='visioimg',
     version='1.0.0',
