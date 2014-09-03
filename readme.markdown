@@ -24,10 +24,10 @@ and write `rst` file as following:
  
  ```
  ... visioimg:: {visio_filename}
-	page:2
+	:page:2
 
 ... visioimg:: {visio_filename}
-	name: circle
+	:name: circle
  ```
 .
 
@@ -35,4 +35,5 @@ and write `rst` file as following:
 
 * Python3
 * Sphinx for Python3
-* win32com
+* visio2img
+

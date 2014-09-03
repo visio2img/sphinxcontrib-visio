@@ -11,7 +11,8 @@ from hashlib import md5
 def setup(builder):
     directives.register_directive('visioimg', VisioImage)
 
-def get_gen_img_filename(visio_filename, **options):
+
+def get_general_image_filename(visio_filename, **options):
     m = md5()
     m.update((visio_filename + str(options)).encode())
     h = m.hexdigest()   # h means hash
@@ -55,7 +56,7 @@ class VisioImage(Directive):
 
 
             visio_filename = self.arguments[0]
-            gen_img_filename = get_gen_img_filename(visio_filename,
+            gen_img_filename = get_general_image_filename(visio_filename,
                     page_num=page_num)
             gen_img_filename = os.path.abspath(gen_img_filename)
             try:
@@ -71,12 +72,10 @@ class VisioImage(Directive):
                             page_num=page_num,
                             page_name=page_name)
                 except Exception as err:
-                    print(err)
-                    stderr.write('Exporting Error')
+                    raise self.error(err)
             except Exception as err:
                 err_text = err.__class__.__name__
                 err_text += str(err)
-                stderr,write(err_text)
                 raise self.error(err_text)
 
             reference = directives.uri(gen_img_filename)
@@ -86,5 +85,4 @@ class VisioImage(Directive):
                                      **d_img_opts)
             return [image_node]
         except Exception as err:
-            stderr.write(str(err))
             return []
