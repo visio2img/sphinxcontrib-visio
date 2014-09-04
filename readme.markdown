@@ -15,18 +15,18 @@ In `conf.py`, please write following:
 and write `rst` file as following:
 
 	```
-	... visioimg:: {visio_filename}
+	... visio:: {visio_filename}
 		e.t.c.
 	```
 .
 
- `visioimg` directive can used as `image` directive and this is the option for `name` and `page`:
+ `visio` directive can used as `image` directive and this is the option for `name` and `page`:
  
  ```
- ... visioimg:: {visio_filename}
+ ... visio:: {visio_filename}
 	:page:1
 
-... visioimg:: {visio_filename}
+... visio:: {visio_filename}
 	:name: circle
  ```
 .
