@@ -8,6 +8,7 @@ from sys import stderr
 from hashlib import md5
 
 
+
 def setup(builder):
     directives.register_directive('visioimg', VisioImage)
 
