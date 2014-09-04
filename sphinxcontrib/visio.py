@@ -10,7 +10,7 @@ from hashlib import md5
 
 
 def setup(builder):
-    directives.register_directive('visioimg', VisioImage)
+    directives.register_directive('visio', VisioImage)
 
 
 def obtain_general_image_filename(visio_filename, **options):

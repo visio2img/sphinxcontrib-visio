@@ -1,17 +1,19 @@
 from setuptools import setup
 
 setup(
-    name='visioemb_rst',
-    version='1.0.0',
+    name='sphinxcontrib-visio',
+    version='0.3.4rc',
     author='Yassu',
     author_email='yassumath@gmail.com',
-    url='https://github.com/yassu/VisioInRst',
+    url='https://github.com/yassu/sphinxcontrib-visio',
     description='Python reStructuredText directive for embedding visio image',
     license='MIT',
-    packages=['visioemb_rst'],
+    packages=['sphinxcontrib'],
     install_requires=[
         'visio2img'
     ],
+    namespace_packages=['sphinxcontrib'],
+    
     classifiers=[
     'Development Status :: 4 - Beta',
     'Intended Audience :: Developers',

@@ -8,7 +8,7 @@ In `conf.py`, please write following:
 
 	```
 	# extensions = []
-	extensions = ['visioemb_rst.visioimg']
+	extensions = ['sphinxcontrib.visio']
 	```
 .
 
@@ -30,6 +30,9 @@ and write `rst` file as following:
 	:name: circle
  ```
 .
+
+Note that `{visio_filename}` is absolute path or relation path from root(not
+source directly).
 
 ## Requirements
 

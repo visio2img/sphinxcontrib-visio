@@ -22,12 +22,12 @@ Indices and tables
 
 first Example
 
-.. visioimg:: source/example.vsd
+.. visio:: source/example.vsd
     :page: 1
     :align: center
 
 Second Example
 
-.. visioimg:: source/example.vsd
+.. visio:: source/example.vsd
     :name: circle
 

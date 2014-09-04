@@ -1,7 +1,9 @@
 build/
+dist/
 
 *.png
 *.un~
 
 */__pycache__/
 visioimg.egg-info
+sphinxcontrib_visio.egg-info/
