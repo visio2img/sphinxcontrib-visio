@@ -12,7 +12,7 @@ def setup(builder):
     directives.register_directive('visioimg', VisioImage)
 
 
-def get_general_image_filename(visio_filename, **options):
+def obtain_general_image_filename(visio_filename, **options):
     m = md5()
     m.update((visio_filename + str(options)).encode())
     h = m.hexdigest()   # h means hash
@@ -56,7 +56,7 @@ class VisioImage(Directive):
 
 
             visio_filename = self.arguments[0]
-            gen_img_filename = get_general_image_filename(visio_filename,
+            gen_img_filename = obtain_general_image_filename(visio_filename,
                     page_num=page_num)
             gen_img_filename = os.path.abspath(gen_img_filename)
             try:
