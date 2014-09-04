@@ -1,0 +1,7 @@
+build/
+
+*.png
+*.un~
+
+*/__pycache__/
+visioimg.egg-info
