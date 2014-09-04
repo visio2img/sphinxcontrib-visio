@@ -24,7 +24,7 @@ and write `rst` file as following:
  
  ```
  ... visioimg:: {visio_filename}
-	:page:2
+	:page:1
 
 ... visioimg:: {visio_filename}
 	:name: circle
