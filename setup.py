@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='sphinxcontrib-visio',
-    version='0.3.4rc',
+    version='1.0.0',
     author='Yassu',
     author_email='yassumath@gmail.com',
     url='https://github.com/yassu/sphinxcontrib-visio',
