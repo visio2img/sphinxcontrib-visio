@@ -4,8 +4,11 @@ from docutils.parsers.rst import Directive
 
 from visio2img import export_img
 import os.path
+from os import stat
 from sys import stderr
 from hashlib import md5
+from time import time
+from datetime import datetime
 
 
 
@@ -18,6 +21,7 @@ def obtain_general_image_filename(visio_filename, **options):
     m.update((visio_filename + str(options)).encode())
     h = m.hexdigest()   # h means hash
     return os.path.join(os.path.dirname(visio_filename), h) + '.png'
+
 
 def align(argument):
     """Conversion function for the "align" option."""
@@ -60,24 +64,21 @@ class VisioImage(Directive):
             gen_img_filename = obtain_general_image_filename(visio_filename,
                     page_num=page_num)
             gen_img_filename = os.path.abspath(gen_img_filename)
-            try:
-                try:
-                    print(
-                        'export_img({vis}, {gen}, page_num={num}, '
-                        'page_name={name})'.format(vis=visio_filename,
-                            gen=gen_img_filename, 
-                            num=page_num,
-                            name=page_name)
-                    )
-                    export_img(visio_filename, gen_img_filename,
-                            page_num=page_num,
-                            page_name=page_name)
-                except Exception as err:
-                    raise self.error(err)
-            except Exception as err:
-                err_text = err.__class__.__name__
-                err_text += str(err)
-                raise self.error(err_text)
+            obtain_timestamp = lambda fname:    \
+                    datetime.fromtimestamp(stat(fname).st_mtime)
+            if not os.path.exists(gen_img_filename) or (
+                    obtain_timestamp(visio_filename) > (
+                        obtain_timestamp(gen_img_filename))):
+                print(
+                    'export_img({vis}, {gen}, page_num={num}, '
+                    'page_name={name})'.format(vis=visio_filename,
+                        gen=gen_img_filename, 
+                        num=page_num,
+                        name=page_name)
+                )
+                export_img(visio_filename, gen_img_filename,
+                        page_num=page_num,
+                        page_name=page_name)
 
             reference = directives.uri(gen_img_filename)
             self.options['uri'] = reference
@@ -86,4 +87,7 @@ class VisioImage(Directive):
                                      **d_img_opts)
             return [image_node]
         except Exception as err:
-            return []
+            err_text = trr.__class__.__name__
+            err_text += str(err)
+            stderr.write(err_text)
+            raise self.error(err_text)
