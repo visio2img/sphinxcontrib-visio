@@ -11,7 +11,6 @@ from time import time
 from datetime import datetime
 
 
-
 def setup(builder):
     directives.register_directive('visio', VisioImage)
 
@@ -46,7 +45,7 @@ class VisioImage(Directive):
     def run(self):
         try:
             d_img_opts = self.options
-            
+
             # for name option
             page_name = None
             if 'name' in d_img_opts:
@@ -59,26 +58,25 @@ class VisioImage(Directive):
                 page_num = d_img_opts['page']
                 del(d_img_opts['page'])
 
-
             visio_filename = self.arguments[0]
             gen_img_filename = obtain_general_image_filename(visio_filename,
-                    page_num=page_num)
+                                                             page_num=page_num)
             gen_img_filename = os.path.abspath(gen_img_filename)
             obtain_timestamp = lambda fname:    \
-                    datetime.fromtimestamp(stat(fname).st_mtime)
+                datetime.fromtimestamp(stat(fname).st_mtime)
             if not os.path.exists(gen_img_filename) or (
                     obtain_timestamp(visio_filename) > (
                         obtain_timestamp(gen_img_filename))):
                 print(
                     'export_img({vis}, {gen}, page_num={num}, '
                     'page_name={name})'.format(vis=visio_filename,
-                        gen=gen_img_filename, 
-                        num=page_num,
-                        name=page_name)
+                                               gen=gen_img_filename,
+                                               num=page_num,
+                                               name=page_name)
                 )
                 export_img(visio_filename, gen_img_filename,
-                        page_num=page_num,
-                        page_name=page_name)
+                           page_num=page_num,
+                           page_name=page_name)
                 except Exception as err:
                     err_text = err.__class__.__name__
                     err_text += str(err)
@@ -87,7 +85,7 @@ class VisioImage(Directive):
 
             reference = directives.uri(gen_img_filename)
             self.options['uri'] = reference
-            
+
             image_node = nodes.image(rawsource=self.block_text,
                                      **d_img_opts)
             return [image_node]
