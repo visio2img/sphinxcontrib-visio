@@ -69,17 +69,16 @@ class VisioImage(Directive):
             if not os.path.exists(gen_img_filename) or (
                     obtain_timestamp(visio_filename) > (
                         obtain_timestamp(gen_img_filename))):
-                try:
-                    print(
-                        'export_img({vis}, {gen}, page_num={num}, '
-                        'page_name={name})'.format(vis=visio_filename,
-                            gen=gen_img_filename, 
-                            num=page_num,
-                            name=page_name)
-                    )
-                    export_img(visio_filename, gen_img_filename,
-                            page_num=page_num,
-                            page_name=page_name)
+                print(
+                    'export_img({vis}, {gen}, page_num={num}, '
+                    'page_name={name})'.format(vis=visio_filename,
+                        gen=gen_img_filename, 
+                        num=page_num,
+                        name=page_name)
+                )
+                export_img(visio_filename, gen_img_filename,
+                        page_num=page_num,
+                        page_name=page_name)
                 except Exception as err:
                     err_text = err.__class__.__name__
                     err_text += str(err)
@@ -93,7 +92,7 @@ class VisioImage(Directive):
                                      **d_img_opts)
             return [image_node]
         except Exception as err:
-            err_text = err.__class__.__name__
+            err_text = trr.__class__.__name__
             err_text += str(err)
-            print(err_text)
-            print(str(err.__traceback__))
+            stderr.write(err_text)
+            raise self.error(err_text)
