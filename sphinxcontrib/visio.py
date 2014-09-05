@@ -79,6 +79,11 @@ class VisioImage(Directive):
                 export_img(visio_filename, gen_img_filename,
                         page_num=page_num,
                         page_name=page_name)
+                except Exception as err:
+                    err_text = err.__class__.__name__
+                    err_text += str(err)
+                    print(err_text)
+                    raise self.error(err_text)
 
             reference = directives.uri(gen_img_filename)
             self.options['uri'] = reference
