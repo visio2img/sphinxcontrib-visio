@@ -40,23 +40,12 @@ class VisioImage(Directive):
 
     def run(self):
         try:
-            d_img_opts = self.options
-
-            # for name option
-            page_name = None
-            if 'name' in d_img_opts:
-                page_name = d_img_opts['name']
-                del(d_img_opts['name'])
-
-            # for page option
-            page_num = None
-            if 'page' in d_img_opts:
-                page_num = d_img_opts['page']
-                del(d_img_opts['page'])
+            pagename = self.options.pop('name', None)
+            pagenum = self.options.pop('page', None)
 
             visio_filename = self.arguments[0]
             gen_img_filename = obtain_general_image_filename(visio_filename,
-                                                             page_num=page_num)
+                                                             page_num=pagenum)
             gen_img_filename = os.path.abspath(gen_img_filename)
             obtain_timestamp = lambda fname:    \
                 datetime.fromtimestamp(stat(fname).st_mtime)
@@ -67,18 +56,16 @@ class VisioImage(Directive):
                     'export_img({vis}, {gen}, page_num={num}, '
                     'page_name={name})'.format(vis=visio_filename,
                                                gen=gen_img_filename,
-                                               num=page_num,
-                                               name=page_name)
+                                               num=pagenum,
+                                               name=pagename)
                 )
-                export_img(visio_filename, gen_img_filename,
-                           page_num=page_num,
-                           page_name=page_name)
+                export_img(visio_filename, gen_img_filename, pagenum, pagename)
 
             reference = directives.uri(gen_img_filename)
             self.options['uri'] = reference
 
             image_node = nodes.image(rawsource=self.block_text,
-                                     **d_img_opts)
+                                     **self.options)
             return [image_node]
         except Exception as err:
             err_text = err.__class__.__name__
