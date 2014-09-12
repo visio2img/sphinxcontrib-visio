@@ -11,10 +11,6 @@ from time import time
 from datetime import datetime
 
 
-def setup(builder):
-    directives.register_directive('visio', VisioImage)
-
-
 def obtain_general_image_filename(visio_filename, **options):
     m = md5()
     m.update((visio_filename + str(options)).encode())
@@ -89,3 +85,7 @@ class VisioImage(Directive):
             err_text += str(err)
             stderr.write(err_text)
             raise self.error(err_text)
+
+
+def setup(app):
+    app.add_directive('visio', VisioImage)
