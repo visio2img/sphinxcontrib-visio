@@ -1,7 +1,7 @@
 from docutils import nodes
 from docutils.parsers.rst import directives
 from docutils.parsers.rst import Directive
-
+from docutils.parsers.rst.directives.images import Image
 from visio2img.visio2img import export_img
 import os.path
 from os import stat
@@ -18,41 +18,35 @@ def obtain_general_image_filename(visio_filename, **options):
     return os.path.join(os.path.dirname(visio_filename), h) + '.png'
 
 
-def align(argument):
-    """Conversion function for the "align" option."""
-    return directives.choice(argument, ('left', 'center', 'right'))
-
-
 class visio_image(nodes.General, nodes.Element):
     pass
 
 
-class VisioImage(Directive):
-
-    required_arguments = 1
-    optional_arguments = 0
-    final_argument_whitespace = True
-    option_spec = {'alt': directives.unchanged,
-                   'height': directives.nonnegative_int,
-                   'width': directives.nonnegative_int,
-                   'scale': directives.nonnegative_int,
-                   'align': align,
-                   'page': directives.nonnegative_int,
-                   'name': lambda arg: arg
-                   }
-    has_content = False
+class VisioImage(Image):
+    option_spec = Image.option_spec.copy()
+    option_spec['page'] = directives.nonnegative_int
+    option_spec['name'] = directives.unchanged
 
     def run(self):
-        try:
-            image_node = visio_image(filename=self.arguments[0],
-                                     pagenum=self.options.pop('page', None),
-                                     pagename=self.options.pop('name', None))
-            return [image_node]
-        except Exception as err:
-            err_text = err.__class__.__name__
-            err_text += str(err)
-            stderr.write(err_text)
-            raise self.error(err_text)
+        pagenum = self.options.pop('page', None)
+        pagename = self.options.pop('name', None)
+
+        result = super(VisioImage, self).run()
+        if isinstance(result[0], nodes.image):
+            image = visio_image(filename=self.arguments[0],
+                                pagenum=pagenum,
+                                pagename=pagename,
+                                **result[0].attributes)
+            result[0] = image
+        else:
+            for node in result[0].traverse(nodes.image):
+                image = visio_image(filename=self.arguments[0],
+                                    pagenum=pagenum,
+                                    pagename=pagename,
+                                    **node[0].attributes)
+                node.replace_self(image)
+
+        return result
 
 
 def on_doctree_resolved(app, doctree, docname):
@@ -67,7 +61,9 @@ def on_doctree_resolved(app, doctree, docname):
             export_img(visio_pathname, image_pathname, node['pagenum'], node['pagename'])
 
         reference = directives.uri(os.path.basename(image_filename))
-        image_node = nodes.image(candidates={'*': os.path.basename(image_filename)}, uri=reference)
+        image_node = nodes.image(candidates={'*': os.path.basename(image_filename)},
+                                 **node.attributes)
+        image_node['uri'] = reference
         node.replace_self(image_node)
 
 
