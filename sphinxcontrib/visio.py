@@ -23,6 +23,10 @@ def align(argument):
     return directives.choice(argument, ('left', 'center', 'right'))
 
 
+class visio_image(nodes.General, nodes.Element):
+    pass
+
+
 class VisioImage(Directive):
 
     required_arguments = 1
@@ -40,32 +44,9 @@ class VisioImage(Directive):
 
     def run(self):
         try:
-            pagename = self.options.pop('name', None)
-            pagenum = self.options.pop('page', None)
-
-            visio_filename = self.arguments[0]
-            gen_img_filename = obtain_general_image_filename(visio_filename,
-                                                             page_num=pagenum)
-            gen_img_filename = os.path.abspath(gen_img_filename)
-            obtain_timestamp = lambda fname:    \
-                datetime.fromtimestamp(stat(fname).st_mtime)
-            if not os.path.exists(gen_img_filename) or (
-                    obtain_timestamp(visio_filename) > (
-                        obtain_timestamp(gen_img_filename))):
-                print(
-                    'export_img({vis}, {gen}, page_num={num}, '
-                    'page_name={name})'.format(vis=visio_filename,
-                                               gen=gen_img_filename,
-                                               num=pagenum,
-                                               name=pagename)
-                )
-                export_img(visio_filename, gen_img_filename, pagenum, pagename)
-
-            reference = directives.uri(gen_img_filename)
-            self.options['uri'] = reference
-
-            image_node = nodes.image(rawsource=self.block_text,
-                                     **self.options)
+            image_node = visio_image(filename=self.arguments[0],
+                                     pagenum=self.options.pop('page', None),
+                                     pagename=self.options.pop('name', None))
             return [image_node]
         except Exception as err:
             err_text = err.__class__.__name__
@@ -74,5 +55,22 @@ class VisioImage(Directive):
             raise self.error(err_text)
 
 
+def on_doctree_resolved(app, doctree, docname):
+    for node in doctree.traverse(visio_image):
+        image_filename = obtain_general_image_filename(os.path.join(app.outdir, node['filename']),
+                                                       **node.attributes)
+        image_pathname = os.path.abspath(image_filename)
+        last_modified = os.stat(node['filename']).st_mtime
+
+        if not os.path.exists(image_pathname) or os.stat(image_pathname).st_mtime < last_modified:
+            visio_pathname = os.path.abspath(node['filename'])
+            export_img(visio_pathname, image_pathname, node['pagenum'], node['pagename'])
+
+        reference = directives.uri(os.path.basename(image_filename))
+        image_node = nodes.image(candidates={'*': os.path.basename(image_filename)}, uri=reference)
+        node.replace_self(image_node)
+
+
 def setup(app):
     app.add_directive('visio', VisioImage)
+    app.connect('doctree-resolved', on_doctree_resolved)
