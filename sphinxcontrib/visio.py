@@ -28,19 +28,23 @@ class VisioImage(Image):
     option_spec['name'] = directives.unchanged
 
     def run(self):
+        filename = self.arguments[0]
         pagenum = self.options.pop('page', None)
         pagename = self.options.pop('name', None)
 
+        if not os.path.exists(filename):
+            raise self.warning('visio file not found: %s' % filename)
+
         result = super(VisioImage, self).run()
         if isinstance(result[0], nodes.image):
-            image = visio_image(filename=self.arguments[0],
+            image = visio_image(filename=filename,
                                 pagenum=pagenum,
                                 pagename=pagename,
                                 **result[0].attributes)
             result[0] = image
         else:
             for node in result[0].traverse(nodes.image):
-                image = visio_image(filename=self.arguments[0],
+                image = visio_image(filename=filename,
                                     pagenum=pagenum,
                                     pagename=pagename,
                                     **node[0].attributes)
