@@ -2,24 +2,61 @@ from docutils import nodes
 from docutils.parsers.rst import directives
 from docutils.parsers.rst import Directive
 from docutils.parsers.rst.directives.images import Image
-from visio2img.visio2img import export_img
+from visio2img import visio2img
+from sphinx.util.osutil import ensuredir
 import os.path
 from os import stat
 from sys import stderr
-from hashlib import md5
+from hashlib import sha1
 from time import time
 from datetime import datetime
 
 
-def obtain_general_image_filename(visio_filename, **options):
-    m = md5()
-    m.update((visio_filename + str(options)).encode())
-    h = m.hexdigest()   # h means hash
-    return os.path.join(os.path.dirname(visio_filename), h) + '.png'
-
-
 class visio_image(nodes.General, nodes.Element):
-    pass
+    def convert_to(self, filename, builder):
+        try:
+            visio_pathname = os.path.abspath(self['filename'])
+            image_filename = os.path.abspath(filename)
+
+            ensuredir(os.path.dirname(image_filename))
+            visio2img.export_img(visio_pathname, image_filename,
+                                 self['pagenum'], self['pagename'])
+            return True
+        except Exception as exc:
+            builder.warn('Fail to convert visio image: %s' % exc)
+            return False
+
+    def get_image_filename(self):
+        options = dict(filename=self['filename'],
+                       pagenum=self['pagenum'],
+                       pagename=self['pagename'])
+        hashed = sha1(str(options).encode('utf-8')).hexdigest()
+        return "visio-%s.png" % hashed
+
+    def to_image(self, builder):
+        if builder.format == 'html':
+            reldir = "_images"
+            outdir = os.path.join(builder.outdir, '_images')
+        else:
+            reldir = ""
+            outdir = builder.outdir
+
+        filename = self.get_image_filename()
+        path = os.path.join(outdir, filename)
+        last_modified = os.stat(self['filename']).st_mtime
+
+        if not os.path.exists(path) or os.stat(path).st_mtime < last_modified:
+            ret = self.convert_to(path, builder=builder)
+            if ret:
+                os.utime(path, (last_modified, last_modified))
+            else:
+                return nodes.Text('')
+
+        relfn = os.path.join(reldir, filename)
+        image_node = nodes.image(candidates={'*': relfn}, **self.attributes)
+        image_node['uri'] = relfn
+
+        return image_node
 
 
 class VisioImage(Image):
@@ -54,21 +91,9 @@ class VisioImage(Image):
 
 
 def on_doctree_resolved(app, doctree, docname):
-    for node in doctree.traverse(visio_image):
-        image_filename = obtain_general_image_filename(os.path.join(app.outdir, node['filename']),
-                                                       **node.attributes)
-        image_pathname = os.path.abspath(image_filename)
-        last_modified = os.stat(node['filename']).st_mtime
-
-        if not os.path.exists(image_pathname) or os.stat(image_pathname).st_mtime < last_modified:
-            visio_pathname = os.path.abspath(node['filename'])
-            export_img(visio_pathname, image_pathname, node['pagenum'], node['pagename'])
-
-        reference = directives.uri(os.path.basename(image_filename))
-        image_node = nodes.image(candidates={'*': os.path.basename(image_filename)},
-                                 **node.attributes)
-        image_node['uri'] = reference
-        node.replace_self(image_node)
+    for visio in doctree.traverse(visio_image):
+        image_node = visio.to_image(app.builder)
+        visio.replace_self(image_node)
 
 
 def setup(app):
