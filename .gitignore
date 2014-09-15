@@ -1,9 +1,15 @@
-build/
-dist/
-
-*.png
+*.un
 *.un~
+*.swp
+*.pyc
+*.pyo
+*.egg-info
+__pycache__
 
-*/__pycache__/
-visioimg.egg-info
-sphinxcontrib_visio.egg-info/
+.coverage
+.tox/
+dist/
+Lib/
+man/
+Include/
+Scripts/
