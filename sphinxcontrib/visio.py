@@ -2,7 +2,7 @@ from docutils import nodes
 from docutils.parsers.rst import directives
 from docutils.parsers.rst import Directive
 
-from visio2img import export_img
+from visio2img.visio2img import export_img
 import os.path
 from os import stat
 from sys import stderr
