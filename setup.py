@@ -10,7 +10,7 @@ setup(
     license='MIT',
     packages=['sphinxcontrib'],
     install_requires=[
-        'visio2img'
+        'visio2img >= 1.2.0'
     ],
     namespace_packages=['sphinxcontrib'],
 

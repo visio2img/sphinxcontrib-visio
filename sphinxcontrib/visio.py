@@ -2,7 +2,7 @@ from docutils import nodes
 from docutils.parsers.rst import directives
 from docutils.parsers.rst import Directive
 from docutils.parsers.rst.directives.images import Image
-from visio2img import visio2img
+from visio2img.visio2img import VisioFile, filter_pages
 from sphinx.util.osutil import ensuredir
 import os.path
 from os import stat
@@ -15,13 +15,18 @@ from datetime import datetime
 class visio_image(nodes.General, nodes.Element):
     def convert_to(self, filename, builder):
         try:
-            visio_pathname = os.path.abspath(self['filename'])
-            image_filename = os.path.abspath(filename)
+            with VisioFile.Open(self['filename']) as visio:
+                pages = filter_pages(visio.pages, self['pagenum'], self['pagename'])
+                if len(pages) > 1:
+                    msg = ('visio file [%s] contains multiple pages. '
+                           'specify :page: or :name: option.')
+                    builder.warn(msg % self['filename'])
+                    return False
 
-            ensuredir(os.path.dirname(image_filename))
-            visio2img.export_img(visio_pathname, image_filename,
-                                 self['pagenum'], self['pagename'])
-            return True
+                image_filename = os.path.abspath(filename)
+                ensuredir(os.path.dirname(image_filename))
+                pages[0].Export(image_filename)
+                return True
         except Exception as exc:
             builder.warn('Fail to convert visio image: %s' % exc)
             return False
