@@ -2,7 +2,7 @@ import os
 from hashlib import sha1
 from docutils import nodes
 from docutils.parsers.rst import directives
-from docutils.parsers.rst.directives.images import Image
+from docutils.parsers.rst.directives.images import Image, Figure
 from visio2img.visio2img import VisioFile, filter_pages
 from sphinx.util.osutil import ensuredir
 
@@ -86,8 +86,32 @@ class VisioImage(Image):
                 image = visio_image(filename=filename,
                                     pagenum=pagenum,
                                     pagename=pagename,
-                                    **node[0].attributes)
+                                    **node.attributes)
                 node.replace_self(image)
+
+        return result
+
+
+class VisioFigure(Figure):
+    option_spec = Figure.option_spec.copy()
+    option_spec['page'] = directives.nonnegative_int
+    option_spec['name'] = directives.unchanged
+
+    def run(self):
+        filename = self.arguments[0]
+        pagenum = self.options.pop('page', None)
+        pagename = self.options.pop('name', None)
+
+        if not os.path.exists(filename):
+            raise self.warning('visio file not found: %s' % filename)
+
+        result = super(VisioFigure, self).run()
+        for node in result[0].traverse(nodes.image):
+            image = visio_image(filename=filename,
+                                pagenum=pagenum,
+                                pagename=pagename,
+                                **node.attributes)
+            node.replace_self(image)
 
         return result
 
@@ -100,4 +124,6 @@ def on_doctree_resolved(app, doctree, docname):
 
 def setup(app):
     app.add_directive('visio', VisioImage)
+    app.add_directive('visio-image', VisioImage)
+    app.add_directive('visio-figure', VisioFigure)
     app.connect('doctree-resolved', on_doctree_resolved)
