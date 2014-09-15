@@ -1,22 +1,19 @@
+import os
+from hashlib import sha1
 from docutils import nodes
 from docutils.parsers.rst import directives
-from docutils.parsers.rst import Directive
 from docutils.parsers.rst.directives.images import Image
 from visio2img.visio2img import VisioFile, filter_pages
 from sphinx.util.osutil import ensuredir
-import os.path
-from os import stat
-from sys import stderr
-from hashlib import sha1
-from time import time
-from datetime import datetime
 
 
 class visio_image(nodes.General, nodes.Element):
     def convert_to(self, filename, builder):
         try:
             with VisioFile.Open(self['filename']) as visio:
-                pages = filter_pages(visio.pages, self['pagenum'], self['pagename'])
+                pages = filter_pages(visio.pages,
+                                     self['pagenum'],
+                                     self['pagename'])
                 if len(pages) > 1:
                     msg = ('visio file [%s] contains multiple pages. '
                            'specify :page: or :name: option.')
