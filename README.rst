@@ -16,6 +16,7 @@ Requirements
 =============
 
 * Python 2.7, 3.3 or later
+* Sphinx 1.0 or later
 * pywin32_
 * visio2img_ 1.2.0 or later
 * Microsoft Visio
