@@ -4,10 +4,6 @@ sphinxcontrib-visio
 
 `sphinxcontrib-visio` is a sphinx extension. It embeds MS-Visio file (.vsd, .vsdx) to your documents.
 
-.. image:: https://travis-ci.org/visio2img/sphinxcontrib-visio.svg?branch=master
-   :target: https://travis-ci.org/visio2img/sphinxcontrib-visio
-   :alt: Build Status
-
 .. image:: https://pypip.in/v/sphinxcontrib-visio/badge.png
    :target: https://pypi.python.org/pypi/sphinxcontrib-visio/
    :alt: Latest PyPI version
