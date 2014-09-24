@@ -82,7 +82,9 @@ class VisioImage(Image):
     option_spec['name'] = directives.unchanged
 
     def run(self):
-        filename = self.arguments[0]
+        env = self.state.document.settings.env
+        rel_filename, filename = env.relfn2path(self.arguments[0])
+        env.note_dependency(rel_filename)
         pagenum = self.options.pop('page', None)
         pagename = self.options.pop('name', None)
 
