@@ -33,6 +33,10 @@ setup(
     packages=['sphinxcontrib'],
     namespace_packages=['sphinxcontrib'],
     install_requires=[
+        'Sphinx >= 1.0.0',
         'visio2img >= 1.2.0'
+    ],
+    tests_require=[
+        'sphinx-testing',
     ],
 )
