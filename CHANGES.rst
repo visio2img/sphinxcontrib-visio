@@ -4,8 +4,10 @@ Changelog
 1.1.0 (2014-09-24)
 -------------------
 
+- Add `visio-image` and `visio-figure` directives
 - Change license to Apache 2.0
 - Update docs
+- Fix bugs
 
 1.0.2 (2014-09-15)
 -------------------
