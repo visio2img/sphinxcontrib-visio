@@ -83,14 +83,16 @@ class VisioImage(Image):
 
     def run(self):
         env = self.state.document.settings.env
-        rel_filename, filename = env.relfn2path(self.arguments[0])
-        env.note_dependency(rel_filename)
+        path = env.doc2path(env.docname, base=None)
+        rel_filename = os.path.join(os.path.dirname(path), self.arguments[0])
+        filename = os.path.join(env.srcdir, rel_filename)
         pagenum = self.options.pop('page', None)
         pagename = self.options.pop('name', None)
 
         if not os.path.exists(filename):
             raise self.warning('visio file not found: %s' % filename)
 
+        env.note_dependency(rel_filename)
         result = super(VisioImage, self).run()
         if isinstance(result[0], nodes.image):
             image = visio_image(filename=filename,
