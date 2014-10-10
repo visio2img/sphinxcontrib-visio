@@ -2,8 +2,8 @@
 
 import unittest
 from time import time
-from sphinx.testing import with_app
-from sphinx.testing.path import path
+from sphinx_testing import with_app
+from sphinx_testing.path import path
 
 
 class TestSphinxcontribBlockdiagHTML(unittest.TestCase):

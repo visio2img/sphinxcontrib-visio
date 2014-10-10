@@ -37,6 +37,6 @@ setup(
         'visio2img >= 1.2.0'
     ],
     tests_require=[
-        'sphinx-testing',
+        'sphinx-testing >= 0.3.0',
     ],
 )
