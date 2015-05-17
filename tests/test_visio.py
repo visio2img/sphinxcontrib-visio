@@ -38,6 +38,21 @@ class TestSphinxcontribBlockdiagHTML(unittest.TestCase):
 
         self.assertIn('0 added, 1 changed, 0 removed', status.getvalue())
 
+    @with_app(buildername='html', srcdir="tests/examples/subdir", copy_srcdir_to_tmpdir=True)
+    def test_visio_in_subdir(self, app, status, warnings):
+        # first build
+        app.build()
+        html = (app.outdir / 'subdir' / 'index.html').read_text()
+        image_files = (app.outdir / '_images').listdir()
+        self.assertEqual(1, len(image_files))
+        image_filename = image_files[0]
+
+        self.assertRegexpMatches(html, '<img alt="(\.\.\\\\_images\\\\%s)" src="\\1" />' % image_filename)
+
+        expected = path("tests/examples/multipages-1.png").read_bytes()
+        actual = (app.outdir / '_images' / image_filename).read_bytes()
+        self.assertEqual(expected, actual)
+
     @with_app(buildername='html', srcdir="tests/examples/pagenum", copy_srcdir_to_tmpdir=True)
     def test_page_option(self, app, status, warnings):
         # first build

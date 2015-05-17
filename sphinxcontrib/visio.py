@@ -51,11 +51,16 @@ class visio_image(nodes.General, nodes.Element):
         return "visio-%s.png" % hashed
 
     def to_image(self, builder):
-        if builder.format == 'html':
-            reldir = "_images"
+        if hasattr(builder, 'imgpath'):  # Sphinx (<= 1.2.x) or HTML writer
+            reldir = builder.imgpath
+        else:
+            reldir = ''
+
+        if hasattr(builder, 'imagedir'):  # Sphinx (>= 1.3.x)
+            outdir = os.path.join(builder.outdir, builder.imagedir)
+        elif hasattr(builder, 'imgpath'):  # Sphinx (<= 1.2.x) and HTML writer
             outdir = os.path.join(builder.outdir, '_images')
         else:
-            reldir = ""
             outdir = builder.outdir
 
         filename = self.get_image_filename()
