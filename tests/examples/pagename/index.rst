@@ -1,2 +1,2 @@
 ﻿.. visio-image:: multipages.vsdx
-   :name: ページ - 2
+   :sheet: ページ - 2

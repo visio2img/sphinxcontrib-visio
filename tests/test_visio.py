@@ -17,7 +17,7 @@ class TestSphinxcontribBlockdiagHTML(unittest.TestCase):
         self.assertEqual(1, len(image_files))
         image_filename = image_files[0]
 
-        self.assertRegexpMatches(html, '<img alt="(_images\\\\%s)" src="\\1" />' % image_filename)
+        self.assertRegexpMatches(html, '<img alt="(_images/%s)" src="\\1" />' % image_filename)
 
         expected = path("tests/examples/singlepage.png").read_bytes()
         actual = (app.outdir / '_images' / image_filename).read_bytes()
@@ -47,7 +47,7 @@ class TestSphinxcontribBlockdiagHTML(unittest.TestCase):
         self.assertEqual(1, len(image_files))
         image_filename = image_files[0]
 
-        self.assertRegexpMatches(html, '<img alt="(\.\.\\\\_images\\\\%s)" src="\\1" />' % image_filename)
+        self.assertRegexpMatches(html, '<img alt="(\.\./_images/%s)" src="\\1" />' % image_filename)
 
         expected = path("tests/examples/multipages-1.png").read_bytes()
         actual = (app.outdir / '_images' / image_filename).read_bytes()
@@ -62,7 +62,7 @@ class TestSphinxcontribBlockdiagHTML(unittest.TestCase):
         self.assertEqual(1, len(image_files))
         image_filename = image_files[0]
 
-        self.assertRegexpMatches(html, '<img alt="(_images\\\\%s)" src="\\1" />' % image_filename)
+        self.assertRegexpMatches(html, '<img alt="(_images/%s)" src="\\1" />' % image_filename)
 
         expected = path("tests/examples/multipages-1.png").read_bytes()
         actual = (app.outdir / '_images' / image_filename).read_bytes()
@@ -77,7 +77,7 @@ class TestSphinxcontribBlockdiagHTML(unittest.TestCase):
         self.assertEqual(1, len(image_files))
         image_filename = image_files[0]
 
-        self.assertRegexpMatches(html, '<img alt="(_images\\\\%s)" src="\\1" />' % image_filename)
+        self.assertRegexpMatches(html, '<img alt="(_images/%s)" src="\\1" />' % image_filename)
 
         expected = path("tests/examples/multipages-2.png").read_bytes()
         actual = (app.outdir / '_images' / image_filename).read_bytes()
