@@ -59,8 +59,10 @@ Directives
    ``page`` : number
       Page number of the page to embed to document.
 
-   ``name`` : text
-      Title of the page to embed to document.
+   ``sheet`` : text
+      Title of the sheet to embed to document.
+
+      .. note:: `name` is deprecated on 2.0.0
 
 **.. visio-figure: [filename]**
 
