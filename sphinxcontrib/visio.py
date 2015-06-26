@@ -13,6 +13,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+import pkg_resources
 from hashlib import sha1
 from docutils.parsers.rst import directives
 from visio2img.visio2img import VisioFile, filter_pages
@@ -53,3 +54,9 @@ def setup(app):
     add_image_type(app, 'visio', ('vsd', 'vsdx'), VisioConverter)
     add_image_directive(app, 'visio', VisioConverter.option_spec)
     add_figure_directive(app, 'visio', VisioConverter.option_spec)
+
+    return {
+        'version': pkg_resources.require('sphinxcontrib-visio')[0].version,
+        'parallel_read_safe': True,
+        'parallel_write_safe': True,
+    }
