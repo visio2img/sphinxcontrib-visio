@@ -1,6 +1,14 @@
 Changelog
 ==========
 
+2.0.0 (2015-06-26)
+-------------------
+- Make `image` and `figure` directives support visio images
+- Rename `name` option of `visio-image` and `visio-figure` directives (Usually, `name` is used for linking)
+- Fix bugs
+
+  - Fix invalid path was generated when .rst is in subdir
+
 1.1.0 (2014-09-24)
 -------------------
 
