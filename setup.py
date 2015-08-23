@@ -1,9 +1,10 @@
 from setuptools import setup
 
 classifiers = [
-    'Development Status :: 4 - Beta',
+    'Development Status :: 5 - Production/Stable',
     'Environment :: Console',
     'Environment :: Win32 (MS Windows)',
+    'Framework :: Sphinx :: Extension',
     'License :: OSI Approved :: Apache Software License',
     'Operating System :: Microsoft :: Windows',
     'Programming Language :: Python',
@@ -13,6 +14,7 @@ classifiers = [
     'Programming Language :: Python :: 3.3',
     'Programming Language :: Python :: 3.4',
     'Topic :: Documentation',
+    'Topic :: Documentation :: Sphinx',
     'Topic :: Multimedia :: Graphics :: Graphics Conversion',
     'Topic :: Office/Business :: Office Suites',
     'Topic :: Software Development :: Libraries :: Python Modules',
