@@ -27,7 +27,7 @@ setup(
     description='Sphinx "visio" extension; embed MS-Visio file (.vsd, .vsdx)',
     long_description=open('README.rst').read(),
     author='Yassu',
-    author_email='yassumath@gmail.com',
+    author_email='mathyassu@gmail.com',
     maintainer='Takeshi KOMIYA',
     maintainer_email='i.tkomiya@gmail.com',
     url='https://github.com/visio2img/sphinxcontrib-visio',

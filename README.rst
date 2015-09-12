@@ -88,7 +88,7 @@ Directives
 Author
 =======
 
-Yassu <yassumath@gmail.com>
+Yassu <mathyassu@gmail.com>
 
 Maintainer
 ===========
