@@ -27,15 +27,12 @@ Requirements
 Setup
 ======
 
-Install `sphinxcontrib-visio` package.
-
-::
+1. Install pywin32_ manually
+2. Install `sphinxcontrib-visio` package::
 
    $ pip install sphinxcontrib-visio
 
-And then, append `sphinxcontrib.visio` to `conf.py` of your Sphinx project.
-
-::
+And then, append `sphinxcontrib.visio` to `conf.py` of your Sphinx project::
 
    # extensions = []
    extensions = ['sphinxcontrib.visio']
