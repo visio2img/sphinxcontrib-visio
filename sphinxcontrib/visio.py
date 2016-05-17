@@ -16,7 +16,9 @@
 import pkg_resources
 from hashlib import sha1
 from docutils.parsers.rst import directives
-from visio2img.visio2img import VisioFile, filter_pages
+from visio2img.visio2img import (
+    VisioFile, filter_pages, is_pywin32_available
+)
 from sphinxcontrib.imagehelper import (
     ImageConverter, add_image_type, add_image_directive, add_figure_directive
 )
@@ -34,6 +36,11 @@ class VisioConverter(ImageConverter):
         return "visio-%s.png" % hashed
 
     def convert(self, node, filename, to):
+        if not is_pywin32_available():
+            self.app.env.warn_node('Fail to convert visio image: win32com not installed',
+                                   node)
+            return False
+
         try:
             with VisioFile.Open(filename) as visio:
                 pages = filter_pages(visio.pages, node.get('page'), node.get('sheet'))
