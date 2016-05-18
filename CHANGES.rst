@@ -6,6 +6,12 @@ Changelog
 
 - Check pywin32 is installed before running
 
+2.1.1 (not released)
+--------------------
+
+2.1.0 (not released)
+--------------------
+
 2.0.0 (2015-06-26)
 -------------------
 
