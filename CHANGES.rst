@@ -1,8 +1,14 @@
 Changelog
 ==========
 
+2.1.2 (2016-05-18)
+-------------------
+
+- Check pywin32 is installed before running
+
 2.0.0 (2015-06-26)
 -------------------
+
 - Make `image` and `figure` directives support visio images
 - Rename `name` option of `visio-image` and `visio-figure` directives (Usually, `name` is used for linking)
 - Fix bugs

@@ -23,7 +23,7 @@ classifiers = [
 
 setup(
     name='sphinxcontrib-visio',
-    version='2.0.0',
+    version='2.1.2',
     description='Sphinx "visio" extension; embed MS-Visio file (.vsd, .vsdx)',
     long_description=open('README.rst').read(),
     author='Yassu',
